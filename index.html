@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI × 自傳寫作實驗室｜互動式學習指南</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-tc@latest/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-tc@latest/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-tc@latest/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc@latest/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc@latest/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc@latest/700.css">
+<style>
+:root{
+  --paper:#f6f1e6; --paper2:#efe7d5; --card:#fffdf6;
+  --ink:#23201a; --ink2:#5c5546; --line:#e0d5bd; --line2:#cfc1a2;
+  --red:#b8432e; --red-d:#8f2f1f; --teal:#2f6d62; --teal-l:#e3efe9;
+  --gold:#c08f3c; --gold-l:#f6ecd8;
+  --dark:#26221b; --cream:#f3ead6;
+  --serif:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  --shadow:0 10px 30px rgba(60,45,20,.10);
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans); color:var(--ink); line-height:1.85; font-size:16px;
+  background-color:var(--paper);
+  background-image:radial-gradient(rgba(120,100,60,.055) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+::selection{background:var(--red);color:#fff}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.4}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+section{padding:92px 0;scroll-margin-top:86px}
+.alt{background:var(--paper2)}
+.dark-sec{background:var(--dark);color:var(--cream)}
+.dark-sec h2,.dark-sec h3{color:var(--cream)}
+
+/* ===== nav ===== */
+#pbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--red),var(--gold));z-index:1002}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(246,241,230,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:700;font-size:18px;text-decoration:none}
+.logo .seal{width:34px;height:34px;background:var(--red);color:#fff;border-radius:8px;display:grid;place-items:center;font-size:15px;font-family:var(--serif);transform:rotate(-6deg);box-shadow:2px 2px 0 rgba(143,47,31,.35)}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links a{text-decoration:none;font-size:14px;font-weight:500;color:var(--ink2);padding:8px 13px;border-radius:999px;transition:.25s}
+.nav-links a:hover{color:var(--ink);background:var(--paper2)}
+.nav-links a.active{color:#fff;background:var(--red)}
+#burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+#burger span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;transition:.3s}
+
+/* ===== hero ===== */
+#hero{padding:150px 0 80px;position:relative;overflow:hidden}
+#hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;letter-spacing:3px;color:var(--red);font-weight:700;margin-bottom:18px}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--red)}
+#hero h1{font-size:clamp(34px,5vw,56px);font-weight:700;margin-bottom:20px}
+#hero h1 em{font-style:normal;color:var(--red)}
+#hero .sub{color:var(--ink2);font-size:17px;max-width:540px;margin-bottom:30px}
+.btn-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;border:2px solid var(--ink);cursor:pointer;font-family:var(--sans);transition:.25s;white-space:nowrap}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.primary:hover{background:var(--red-d);border-color:var(--red-d);transform:translateY(-2px);box-shadow:0 8px 18px rgba(184,67,46,.3)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+.btn.small{padding:8px 16px;font-size:13px;border-radius:8px}
+.stats{display:flex;gap:0;border:1px solid var(--line);border-radius:var(--r);background:var(--card);overflow:hidden;box-shadow:var(--shadow)}
+.stat{flex:1;text-align:center;padding:16px 8px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat b{display:block;font-family:var(--serif);font-size:26px;color:var(--red)}
+.stat span{font-size:12.5px;color:var(--ink2)}
+.hero-art{position:relative}
+.hero-art .frame{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);transform:rotate(1.5deg)}
+.big-stamp{position:absolute;right:-16px;top:-22px;width:74px;height:74px;background:var(--red);color:#fff;border-radius:12px;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:20px;transform:rotate(8deg);box-shadow:4px 4px 0 rgba(143,47,31,.3);writing-mode:vertical-rl;letter-spacing:4px;padding:6px}
+.vertical-note{position:absolute;right:10px;top:180px;writing-mode:vertical-rl;font-family:var(--serif);color:var(--line2);letter-spacing:8px;font-size:14px;user-select:none;display:none}
+
+/* ===== chapter head ===== */
+.ch-head{margin-bottom:52px}
+.ch-no{font-size:13px;letter-spacing:4px;color:var(--red);font-weight:700;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.ch-no::after{content:"";flex:0 0 46px;height:1px;background:var(--red)}
+.ch-head h2{font-size:clamp(26px,3.4vw,38px);font-weight:700;margin-bottom:12px}
+.ch-head p{color:var(--ink2);max-width:720px}
+.dark-sec .ch-no{color:var(--gold)}
+.dark-sec .ch-head p{color:#c9bfa8}
+
+/* ===== cards ===== */
+.grid{display:grid;gap:22px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:.3s;box-shadow:0 2px 8px rgba(60,45,20,.04)}
+.card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:var(--line2)}
+.card h3{font-size:19px;margin-bottom:10px}
+.card p{font-size:14.5px;color:var(--ink2)}
+.icon-box{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;margin-bottom:16px;font-size:22px}
+.ic-red{background:#f6e3de;color:var(--red)}
+.ic-teal{background:var(--teal-l);color:var(--teal)}
+.ic-gold{background:var(--gold-l);color:var(--gold)}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.chip{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12.5px;background:var(--paper2);border:1px solid var(--line);color:var(--ink2)}
+.chip.red{background:#f6e3de;border-color:#ecc9bf;color:var(--red-d)}
+.chip.teal{background:var(--teal-l);border-color:#bcd8cf;color:var(--teal)}
+.mod-card{position:relative;overflow:hidden}
+.mod-card .m-no{font-family:var(--serif);font-size:52px;font-weight:700;color:var(--paper2);position:absolute;right:14px;top:2px;line-height:1}
+.mod-card h3 a{text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 2px no-repeat;transition:.3s}
+.mod-card h3 a:hover{background-size:100% 2px;color:var(--red)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-weight:700;font-size:14px;color:var(--red);text-decoration:none}
+.link-arrow:hover{gap:10px;transition:.25s}
+
+/* ===== quote ===== */
+.quote{border-left:4px solid var(--red);padding:20px 26px;background:var(--card);border-radius:0 var(--r) var(--r) 0;font-family:var(--serif);font-size:18px;line-height:2;box-shadow:var(--shadow)}
+.quote small{display:block;margin-top:8px;font-family:var(--sans);font-size:13px;color:var(--ink2)}
+
+/* ===== flip ===== */
+.flip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.flip{perspective:1200px;height:250px;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r);padding:26px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border:1px solid var(--line)}
+.flip-front{background:var(--card)}
+.flip-back{background:var(--teal);color:#fff;transform:rotateY(180deg);border-color:var(--teal)}
+.flip-front .q{font-size:34px;margin-bottom:10px}
+.flip-front h4{font-size:17px;margin-bottom:8px}
+.flip-front small{color:var(--ink2);font-size:12.5px}
+.flip-back h4{font-size:16px;margin-bottom:10px;color:var(--gold-l)}
+.flip-back p{font-size:13.5px;line-height:1.9;opacity:.95}
+
+/* ===== tables ===== */
+.tbl{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);font-size:14.5px}
+.tbl th{background:var(--dark);color:var(--cream);padding:14px 18px;text-align:left;font-weight:600;font-size:14px}
+.tbl td{padding:14px 18px;border-top:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+.tbl td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+.tbl tr:hover td{background:#faf6ea}
+.tbl-wrap{overflow-x:auto;border-radius:var(--r)}
+
+/* ===== prompt box ===== */
+.promptbox{position:relative;background:var(--dark);color:var(--cream);border-radius:var(--r);padding:24px 26px;font-size:14px;line-height:2;white-space:pre-wrap;box-shadow:var(--shadow)}
+.promptbox::before{content:"PROMPT";position:absolute;top:-10px;left:18px;background:var(--red);color:#fff;font-size:10px;letter-spacing:2px;padding:3px 10px;border-radius:6px;font-weight:700}
+.copy-btn{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--cream);padding:6px 14px;border-radius:8px;font-size:12.5px;cursor:pointer;transition:.25s;font-family:var(--sans)}
+.copy-btn:hover{background:var(--red);border-color:var(--red)}
+.pb-label{font-size:12.5px;color:var(--gold);font-weight:700;letter-spacing:1px;margin-bottom:10px}
+
+/* ===== compare ===== */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.cmp-box{border-radius:var(--r);padding:28px;border:1px solid var(--line);position:relative;font-size:15px;line-height:2.1}
+.cmp-before{background:var(--card)}
+.cmp-after{background:#fbf4e6;border:1px solid #e5cf9d;box-shadow:var(--shadow)}
+.cmp-tag{position:absolute;top:-13px;left:22px;padding:4px 14px;border-radius:999px;font-size:12.5px;font-weight:700;color:#fff}
+.cmp-before .cmp-tag{background:#9a917d}
+.cmp-after .cmp-tag{background:var(--teal)}
+.cmp-note{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2);font-size:13px;color:var(--ink2)}
+.hl{background:linear-gradient(transparent 55%,#f4d9a0 55%);padding:0 2px}
+
+/* ===== generator ===== */
+.gen{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+.gen-cols{display:grid;grid-template-columns:1fr 1.15fr;gap:34px}
+.opt-group{margin-bottom:22px}
+.opt-group>label{display:block;font-weight:700;margin-bottom:12px;font-family:var(--serif);font-size:15px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0}
+.opt span{display:block;padding:11px 16px;border:1.5px solid var(--line);border-radius:10px;font-size:14px;cursor:pointer;transition:.2s;background:#fffdf6}
+.opt input:checked+span{background:var(--red);border-color:var(--red);color:#fff;font-weight:600;box-shadow:0 4px 10px rgba(184,67,46,.25)}
+.opt span:hover{border-color:var(--red)}
+#genOut{min-height:180px}
+.gen-hint{font-size:12.5px;color:var(--ink2);margin-top:10px}
+
+/* ===== timeline ===== */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:step}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;position:relative;transition:.3s}
+.step:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.step .n{width:40px;height:40px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:18px;margin-bottom:14px}
+.step h4{font-size:16.5px;margin-bottom:8px}
+.step p{font-size:13.5px;color:var(--ink2)}
+.step::after{content:"→";position:absolute;right:-16px;top:50%;transform:translateY(-50%);color:var(--line2);font-size:20px;z-index:2}
+.step:last-child::after{content:""}
+
+/* ===== worksheet ===== */
+.ws{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.ws-head{background:var(--dark);color:var(--cream);padding:26px 34px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.ws-head h3{font-size:20px}
+.ws-head p{font-size:13px;color:#c9bfa8}
+#saveState{font-size:12.5px;color:var(--gold);opacity:0;transition:.4s}
+#saveState.show{opacity:1}
+.ws-body{padding:36px 34px}
+.ws-sec{margin-bottom:44px;padding-bottom:40px;border-bottom:1px dashed var(--line2)}
+.ws-sec:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ws-sec>h4{font-size:18px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.sec-badge{flex:0 0 auto;width:32px;height:32px;background:var(--red);color:#fff;border-radius:8px;display:grid;place-items:center;font-family:var(--serif);font-size:15px;transform:rotate(-4deg)}
+.ws-sec .task{font-size:13.5px;color:var(--red);font-weight:700;margin-bottom:16px}
+.f-label{display:block;font-weight:600;font-size:14px;margin:16px 0 8px}
+input[type=text],textarea,select{width:100%;padding:12px 15px;border:1.5px solid var(--line);border-radius:10px;font-family:var(--sans);font-size:14.5px;background:#fffdf6;color:var(--ink);transition:.25s;line-height:1.8}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(47,109,98,.13);background:#fff}
+textarea{resize:vertical;min-height:96px}
+.f-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.chk-chips{display:flex;flex-wrap:wrap;gap:10px}
+.chk-chip input{position:absolute;opacity:0}
+.chk-chip span{display:inline-block;padding:9px 18px;border:1.5px solid var(--line);border-radius:999px;font-size:14px;cursor:pointer;transition:.2s;background:#fffdf6;user-select:none}
+.chk-chip input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+.chk-chip span:hover{border-color:var(--teal)}
+.counter{font-size:12.5px;color:var(--ink2);text-align:right;margin-top:6px}
+.counter.ok{color:var(--teal);font-weight:700}
+.framework-tbl td:first-child{white-space:nowrap;font-family:var(--serif);font-weight:700;background:#faf5e9;width:110px}
+.framework-tbl input{border-radius:8px;padding:9px 12px}
+.qa-block{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:#fdfaf1;margin-bottom:14px}
+.qa-block .qa-t{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px;display:flex;gap:8px;align-items:center}
+.ws-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;padding-top:26px;border-top:2px solid var(--line)}
+
+/* ===== career tabs ===== */
+.tabbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.tab-btn{padding:11px 18px;border:1.5px solid rgba(255,255,255,.25);border-radius:10px;background:transparent;color:#c9bfa8;font-size:13.5px;cursor:pointer;transition:.25s;font-family:var(--sans);font-weight:600}
+.tab-btn:hover{border-color:var(--gold);color:var(--gold)}
+.tab-btn.active{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.tab-panel{display:none;animation:fadeUp .45s ease}
+.tab-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.struct-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18px}
+.ex-bad,.ex-good{border-radius:12px;padding:20px 22px;font-size:14px;line-height:2}
+.ex-bad{background:rgba(184,67,46,.12);border:1px solid rgba(184,67,46,.35)}
+.ex-good{background:rgba(47,109,98,.14);border:1px solid rgba(47,109,98,.4)}
+.ex-bad b{color:#e0876f}.ex-good b{color:#7fc3ae}
+.struct-points{list-style:none;margin-top:6px}
+.struct-points li{padding-left:26px;position:relative;margin-bottom:8px;font-size:14.5px;color:#d8cfba}
+.struct-points li::before{content:"✦";position:absolute;left:0;color:var(--gold)}
+.tip-line{margin-top:18px;background:rgba(192,143,60,.14);border:1px dashed var(--gold);border-radius:10px;padding:14px 18px;font-size:13.5px;color:var(--gold-l)}
+
+/* ===== accordion ===== */
+.acc{border:1px solid var(--line);border-radius:var(--r);background:var(--card);overflow:hidden;margin-bottom:12px}
+.acc-btn{width:100%;background:none;border:none;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:var(--serif);font-size:16.5px;font-weight:600;color:var(--ink);text-align:left;gap:16px}
+.acc-btn .pl{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--paper2);display:grid;place-items:center;font-size:16px;transition:.3s;color:var(--red)}
+.acc.open .acc-btn .pl{transform:rotate(45deg);background:var(--red);color:#fff}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.acc-body-in{padding:0 24px 22px;color:var(--ink2);font-size:14.5px}
+
+/* ===== misc ===== */
+.callout{display:flex;gap:18px;align-items:flex-start;background:var(--gold-l);border:1px solid #e3cd9d;border-radius:var(--r);padding:24px 28px;margin-top:36px}
+.callout .c-ic{font-size:28px;line-height:1}
+.callout b{color:var(--red-d)}
+.ethics{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.eth{border-left:4px solid var(--red);background:var(--card);border-radius:0 var(--r) var(--r) 0;padding:24px 26px;box-shadow:0 2px 8px rgba(60,45,20,.05)}
+.eth h4{font-size:16.5px;margin-bottom:8px}
+.eth h4 .warn{color:var(--red)}
+.eth p{font-size:14px;color:var(--ink2);margin-bottom:10px}
+.eth .fix{font-size:13.5px;background:var(--teal-l);border-radius:8px;padding:10px 14px;color:var(--teal)}
+.motto{font-family:var(--serif);text-align:center;font-size:clamp(20px,3vw,28px);line-height:2.2;letter-spacing:2px}
+.motto small{display:block;font-family:var(--sans);font-size:13px;letter-spacing:4px;color:var(--gold);margin-bottom:14px}
+.progress-bar{height:10px;background:var(--paper2);border-radius:999px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:999px;transition:width .4s}
+.workshop{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:var(--shadow)}
+.sample-chips{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sample-chips button{padding:7px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fffdf6;font-size:13px;cursor:pointer;transition:.2s;font-family:var(--sans)}
+.sample-chips button:hover{border-color:var(--red);color:var(--red)}
+#memOut{margin-top:18px;display:none}
+.mem-bullet{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.mem-bullet:last-of-type{border-bottom:none}
+.mem-bullet .b-ic{flex:0 0 auto}
+.role-card{text-align:center}
+.role-card .r-ic{font-size:34px;margin-bottom:12px}
+footer{background:var(--dark);color:#9a9080;padding:56px 0 40px;font-size:13.5px}
+.f-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:34px}
+.f-grid h5{color:var(--cream);font-family:var(--serif);font-size:16px;margin-bottom:14px}
+.f-grid a{display:block;color:#9a9080;text-decoration:none;margin-bottom:8px;transition:.2s}
+.f-grid a:hover{color:var(--gold)}
+.f-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:24px;text-align:center;font-size:12.5px}
+.f-bottom .kr{color:var(--gold);letter-spacing:2px;font-family:var(--serif)}
+#toTop{position:fixed;right:26px;bottom:26px;width:48px;height:48px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:.3s;z-index:999;box-shadow:0 6px 18px rgba(184,67,46,.4)}
+#toTop.show{opacity:1;pointer-events:auto}
+#toTop:hover{transform:translateY(-4px)}
+#toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);background:var(--dark);color:var(--cream);padding:12px 26px;border-radius:999px;font-size:14px;opacity:0;transition:.35s;z-index:1200;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.mini-list{list-style:none}
+.mini-list li{padding-left:26px;position:relative;margin-bottom:10px;font-size:14.5px;color:var(--ink2)}
+.mini-list li::before{content:"◆";position:absolute;left:2px;color:var(--red);font-size:11px;top:4px}
+.mini-list.teal li::before{color:var(--teal)}
+.split-role{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+.split-role>div{border-radius:var(--r);padding:26px}
+.sr-ai{background:#eef3f0;border:1px solid #c8dcd3}
+.sr-hu{background:#faeee7;border:1px solid #ecc9bf}
+.split-role h4{margin-bottom:14px;font-size:17px}
+.sr-ai h4{color:var(--teal)}.sr-hu h4{color:var(--red-d)}
+
+@media(max-width:960px){
+  .g3,.g4,.flip-grid,.steps{grid-template-columns:repeat(2,1fr)}
+  .step::after{display:none}
+  #hero .wrap,.gen-cols,.cmp,.struct-grid,.ethics,.two-col,.split-role{grid-template-columns:1fr}
+  .nav-links{position:fixed;top:64px;right:-280px;width:250px;height:calc(100vh - 64px);background:var(--card);flex-direction:column;padding:22px;gap:6px;border-left:1px solid var(--line);transition:.35s;box-shadow:-10px 0 30px rgba(0,0,0,.08)}
+  .nav-links.open{right:0}
+  #burger{display:block}
+}
+@media(max-width:620px){
+  .g3,.g4,.flip-grid,.steps,.f-row{grid-template-columns:1fr}
+  .stats{flex-wrap:wrap}
+  .stat{flex:1 1 45%;border-bottom:1px solid var(--line)}
+  section{padding:66px 0}
+  .ws-body{padding:24px 18px}
+}
+</style>
+</head>
+<body>
+
+<div id="pbar"></div>
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="#hero"><span class="seal">寫</span>AI 自傳實驗室</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#map">課程地圖</a></li>
+      <li><a href="#meaning">自傳意義</a></li>
+      <li><a href="#techlit">文學×科技</a></li>
+      <li><a href="#aiapp">AI 應用</a></li>
+      <li><a href="#practice">課堂練習</a></li>
+      <li><a href="#career">求職指南</a></li>
+      <li><a href="#reflection">反思作業</a></li>
+    </ul>
+    <button id="burger" aria-label="選單"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header id="hero">
+  <span class="vertical-note">我們書寫，是為了理解自己</span>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">大一國文 × 應用文 × 寫作工作坊</div>
+      <h1>當人類的靈魂，<br>遇見 <em>AI 的算力</em></h1>
+      <p class="sub">三個模組、四階段練習、六段架構心法、十餘組可直接複製的提示詞——從記憶喚醒到潤色成稿，陪你寫出一篇「只有你能寫出」的自傳。</p>
+      <div class="btn-row">
+        <a class="btn primary" href="#meaning">開始探索課程 ↓</a>
+        <a class="btn ghost" href="#practice">直接進入練習工作紙</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>3</b><span>大學習模組</span></div>
+        <div class="stat"><b>4</b><span>階段練習流程</span></div>
+        <div class="stat"><b>6</b><span>段自傳架構</span></div>
+        <div class="stat"><b>1</b><span>無可取代的你</span></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="frame">
+        <svg viewBox="0 0 560 430" role="img" aria-label="書桌插圖：筆記本、筆電與茶">
+          <rect x="0" y="0" width="560" height="430" rx="10" fill="#f1e8d2"/>
+          <circle cx="470" cy="70" r="60" fill="#e8d9b8" opacity=".6"/>
+          <circle cx="90" cy="360" r="46" fill="#e0d3b4" opacity=".5"/>
+          <!-- laptop -->
+          <rect x="300" y="120" width="210" height="150" rx="10" fill="#2f2b23"/>
+          <rect x="312" y="132" width="186" height="118" rx="6" fill="#3d5c53"/>
+          <rect x="324" y="148" width="120" height="20" rx="10" fill="#f3ead6" opacity=".9"/>
+          <rect x="324" y="176" width="90" height="16" rx="8" fill="#c08f3c" opacity=".85"/>
+          <rect x="352" y="204" width="130" height="20" rx="10" fill="#f3ead6" opacity=".9"/>
+          <rect x="292" y="270" width="226" height="12" rx="6" fill="#4a443a"/>
+          <!-- notebook -->
+          <g transform="rotate(-6 160 250)">
+            <rect x="48" y="150" width="230" height="200" rx="8" fill="#fffdf6" stroke="#d9cbaa"/>
+            <line x1="72" y1="185" x2="250" y2="185" stroke="#cfc1a2" stroke-width="3" stroke-linecap="round"/>
+            <line x1="72" y1="212" x2="228" y2="212" stroke="#d8cdb4" stroke-width="3" stroke-linecap="round"/>
+            <line x1="72" y1="239" x2="244" y2="239" stroke="#d8cdb4" stroke-width="3" stroke-linecap="round"/>
+            <line x1="72" y1="266" x2="200" y2="266" stroke="#d8cdb4" stroke-width="3" stroke-linecap="round"/>
+            <line x1="72" y1="293" x2="236" y2="293" stroke="#d8cdb4" stroke-width="3" stroke-linecap="round"/>
+            <rect x="200" y="300" width="52" height="34" rx="6" fill="#b8432e" opacity=".9" transform="rotate(8 226 317)"/>
+          </g>
+          <!-- pen -->
+          <g transform="rotate(24 400 330)">
+            <rect x="330" y="322" width="150" height="12" rx="6" fill="#26221b"/>
+            <polygon points="480,322 502,328 480,334" fill="#c08f3c"/>
+          </g>
+          <!-- tea -->
+          <circle cx="106" cy="92" r="34" fill="#fffdf6" stroke="#d9cbaa" stroke-width="3"/>
+          <circle cx="106" cy="92" r="22" fill="#c08f3c" opacity=".8"/>
+          <path d="M140 84 q16 8 0 20" fill="none" stroke="#d9cbaa" stroke-width="5" stroke-linecap="round"/>
+          <path d="M96 46 q6 -10 0 -18 M112 48 q6 -10 0 -18" fill="none" stroke="#b6a988" stroke-width="3" stroke-linecap="round"/>
+          <!-- sparkles -->
+          <path d="M250 60 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z" fill="#b8432e" opacity=".85"/>
+          <circle cx="330" cy="86" r="4" fill="#2f6d62" opacity=".7"/>
+          <circle cx="60" cy="200" r="4" fill="#c08f3c" opacity=".8"/>
+        </svg>
+      </div>
+      <div class="big-stamp">我的故事</div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= MAP ================= -->
+<section id="map">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">Learning Map・課程地圖</div>
+      <h2>這趟旅程，將帶你走過三段路</h2>
+      <p>無論你是要完成課堂上的文學自傳，還是打造一份能打動人資的求職自傳，這裡都有相對應的心法、工具與練習。</p>
+    </div>
+    <div class="grid g3">
+      <div class="card mod-card reveal">
+        <span class="m-no">壹</span>
+        <div class="icon-box ic-red">📖</div>
+        <h3><a href="#meaning">文學篇｜理解自傳</a></h3>
+        <p>掌握「自我建構」的核心概念，區分流水帳與文學自傳，體會個人故事的普世價值——平凡，往往更動人。</p>
+        <div class="tag-row"><span class="chip red">自我建構</span><span class="chip red">觀點</span><span class="chip red">共鳴</span></div>
+        <a class="link-arrow" href="#meaning">進入 Chapter 01 →</a>
+      </div>
+      <div class="card mod-card reveal">
+        <span class="m-no">貳</span>
+        <div class="icon-box ic-teal">🤖</div>
+        <h3><a href="#aiapp">實戰篇｜AI 共寫</a></h3>
+        <p>學習精準的 Prompt 設計，讓 AI 擔任你的採訪者、結構師與潤稿人，並透過互動工作紙完成課堂練習。</p>
+        <div class="tag-row"><span class="chip teal">Prompt</span><span class="chip teal">訪談提問</span><span class="chip teal">工作紙</span></div>
+        <a class="link-arrow" href="#aiapp">進入 Chapter 03 →</a>
+      </div>
+      <div class="card mod-card reveal">
+        <span class="m-no">參</span>
+        <div class="icon-box ic-gold">💼</div>
+        <h3><a href="#career">求職篇｜自我行銷</a></h3>
+        <p>自傳不是回憶錄，而是一份精準的自我行銷提案。六段架構心法、❌⭕實戰對照，加上 AI 賦能四步驟。</p>
+        <div class="tag-row"><span class="chip">六段架構</span><span class="chip">AI 賦能</span><span class="chip">倫理須知</span></div>
+        <a class="link-arrow" href="#career">進入 Chapter 05 →</a>
+      </div>
+    </div>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card reveal"><h3 style="font-size:16px">🎯 目標一・理解自傳文學</h3><p>學會用「主題」串連記憶，理解為什麼發生、又如何成就了現在的我。</p></div>
+      <div class="card reveal"><h3 style="font-size:16px">🛠 目標二・AI 工具實戰</h3><p>學會設計提示詞、用 AI 進行記憶挖掘與訪談，並優化結構與修辭。</p></div>
+      <div class="card reveal"><h3 style="font-size:16px">⚖️ 目標三・反思與倫理</h3><p>思考人機協作的作者身分，在科技輔助中保有情感溫度與批判思考。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CH01 MEANING ================= -->
+<section id="meaning" class="alt">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">Chapter 01・The Meaning</div>
+      <h2>自傳寫作的意義與特點</h2>
+      <p>自傳不只是記錄，更是一場與自己的深度對話。以下三個價值，是書寫的起點。</p>
+    </div>
+    <div class="quote reveal">
+      「我們書寫，不僅是為了記錄發生了什麼，更是為了理解<b>為什麼發生</b>，以及這些事如何造就了現在的我。」
+      <small>—— 本課程核心精神</small>
+    </div>
+    <div class="grid g3" style="margin-top:34px">
+      <div class="card reveal"><div class="icon-box ic-red">🧵</div><h3>梳理人生脈絡</h3><p>將零散的記憶片段串連成有意義的故事線，找出屬於你生命的「主題曲」。</p></div>
+      <div class="card reveal"><div class="icon-box ic-teal">🌱</div><h3>自我療癒與對話</h3><p>在重訪過去的過程中，與曾經的自己和解，或發現未曾察覺的力量。</p></div>
+      <div class="card reveal"><div class="icon-box ic-gold">🕯</div><h3>連結他人</h3><p>個人的故事往往能引起普世情感的共鳴——你的經歷，可能成為他人的光。</p></div>
+    </div>
+
+    <h3 style="margin:56px 0 8px;font-size:22px" class="reveal">迷思破解！點卡片翻面看真相</h3>
+    <p style="color:var(--ink2);font-size:14px;margin-bottom:24px" class="reveal">寫自傳前，先打破三個最常見的迷思。</p>
+    <div class="flip-grid">
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div class="q">❓</div><h4>一定要有名人成就，才能寫自傳？</h4><small>點擊翻轉查看真相</small></div>
+          <div class="flip-face flip-back"><h4>✅ 事實：平凡更動人</h4><p>每個生命都有獨特的光采。微小的日常細節——如外婆的廚房、放學的那條路——往往比豐功偉業更能觸動人心。</p></div>
+        </div>
+      </div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div class="q">❓</div><h4>自傳就是按年份寫的流水帳？</h4><small>點擊翻轉查看真相</small></div>
+          <div class="flip-face flip-back"><h4>✅ 事實：要有「觀點」</h4><p>好的自傳有「主題」。重點不是記錄發生了什麼，而是這些事對你的意義，以及你如何看待它們。</p></div>
+        </div>
+      </div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div class="q">❓</div><h4>交給 AI 寫一寫，就可以直接繳了？</h4><small>點擊翻轉查看真相</small></div>
+          <div class="flip-face flip-back"><h4>✅ 事實：AI 是鏡子，不是槍手</h4><p>AI 需要你餵養真實的記憶，產出也需要你逐字核對與潤飾。少了你的細節與情感，文字再美也沒有靈魂。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:50px">
+      <div class="reveal">
+        <h3 style="font-size:20px;margin-bottom:16px">一眼分辨：流水帳 vs. 文學自傳</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>比較面向</th><th>流水帳 🥱</th><th>文學自傳 ✨</th></tr>
+          <tr><td>內容</td><td>事件條列，按時間排列</td><td>精選事件，著重「意義」</td></tr>
+          <tr><td>視角</td><td>旁觀式記錄「發生了什麼」</td><td>現在的我，回頭與過去對話</td></tr>
+          <tr><td>細節</td><td>抽象形容：很開心、很感動</td><td>具體感官：聲音、氣味、動作</td></tr>
+          <tr><td>結構</td><td>一年一段，平鋪直敘</td><td>主題式編排，有成長弧線</td></tr>
+          <tr><td>結尾</td><td>「以上就是我的自傳」</td><td>回望與展望，留下餘韻</td></tr>
+        </table></div>
+      </div>
+      <div class="reveal">
+        <h3 style="font-size:20px;margin-bottom:16px">動筆前，先問自己三個問題</h3>
+        <ul class="mini-list">
+          <li><b>哪三個時刻，定義了現在的我？</b>（一次失敗、一次選擇、一次被理解。）</li>
+          <li><b>我想讓讀者認識什麼樣的我？</b>是堅持的、好奇的、溫柔的，還是不服輸的？</li>
+          <li><b>如果只能用一個詞貫穿全文，會是什麼？</b>這就是你的「主題曲」。</li>
+        </ul>
+        <div class="callout" style="margin-top:20px"><span class="c-ic">💡</span><div style="font-size:14px;color:var(--ink2)"><b>主題式連貫技巧：</b>讓所有段落圍繞同一個核心特質。例如童年篇寫「學騎車的堅持」、青年篇寫「準備考試的堅持」——主線清晰，角色成長弧線自然浮現。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CH02 TECH × LIT ================= -->
+<section id="techlit">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">Chapter 02・Where They Meet</div>
+      <h2>文學與科技的交會</h2>
+      <p>當冰冷的演算法遇上溫熱的記憶，我們該如何定義「創作」？</p>
+    </div>
+    <div class="grid g3">
+      <div class="card reveal">
+        <div class="icon-box ic-teal">🦾</div>
+        <h3>Cyborg Writing・賽博格書寫</h3>
+        <p>Donna Haraway 曾提出賽博格概念。在寫作中，AI 成為大腦的延伸：我們不再是孤獨的創作者，而是與機器共舞的指揮家。<b>AI 提供詞彙庫，人類提供靈魂與篩選標準。</b></p>
+      </div>
+      <div class="card reveal">
+        <div class="icon-box ic-gold">🧠</div>
+        <h3>數位記憶的重構</h3>
+        <p>記憶是模糊且流動的。AI 透過大數據的聯想，有時能喚醒被遺忘的細節（例如某個年代街道的氛圍），但也可能製造「幻覺」。<b>辨真，成了新時代作者的責任。</b></p>
+      </div>
+      <div class="card reveal">
+        <div class="icon-box ic-red">❤️</div>
+        <h3>情感溫度的保留</h3>
+        <p>AI 擅長模仿風格，卻無法真正體驗痛苦或喜悅。真正的文學感染力，來自真實的生命體驗。<b>科技負責修辭，人類負責真誠。</b></p>
+      </div>
+    </div>
+    <div class="split-role reveal">
+      <div class="sr-ai">
+        <h4>🤖 AI 擅長的事</h4>
+        <ul class="mini-list teal">
+          <li>詞彙聯想與同義替換，打破詞窮</li>
+          <li>整理零散素材，提出結構建議</li>
+          <li>模仿不同文體與語氣風格</li>
+          <li>提供時代、場景的背景細節參考</li>
+          <li>充当永不疲倦的訪談者與讀者</li>
+        </ul>
+      </div>
+      <div class="sr-hu">
+        <h4>🙋 只有你能做的事</h4>
+        <ul class="mini-list">
+          <li>判斷真偽：這件事真的發生過嗎？</li>
+          <li>提供情感：當時心跳多快、手心多汗</li>
+          <li>做出取捨：留下什麼、刪去什麼</li>
+          <li>賦予意義：它為什麼對你重要</li>
+          <li>按下送出鍵，並為文字負責</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout reveal"><span class="c-ic">🚗</span><div style="font-size:16px;font-family:var(--serif)"><b>AI 是你的副駕駛，方向盤始終在你自己手中。</b><div style="font-family:var(--sans);font-size:13.5px;color:var(--ink2);margin-top:6px">它會看地圖、報路況，但要去哪裡、走哪條路，永遠由你決定。</div></div></div>
+  </div>
+</section>
+
+<!-- ================= CH03 AI APP ================= -->
+<section id="aiapp" class="alt">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">Chapter 03・AI In Action</div>
+      <h2>AI 在自傳寫作中的應用</h2>
+      <p>AI 不是要取代你的記憶，而是擔任你的「採訪者」、「結構師」與「潤稿人」。</p>
+    </div>
+
+    <div class="grid g3" style="margin-bottom:46px">
+      <div class="card role-card reveal"><div class="r-ic">🎙</div><h3>角色一・採訪者</h3><p>請 AI 向你提問：「那次比賽前夜，你做了什麼？」用問題釣出沉睡的細節。</p></div>
+      <div class="card role-card reveal"><div class="r-ic">🏗</div><h3>角色二・結構師</h3><p>把散亂的素材交給 AI，請它提出分段與小標題建議，找出故事主線。</p></div>
+      <div class="card role-card reveal"><div class="r-ic">✒️</div><h3>角色三・潤稿人</h3><p>把寫好的句子交給 AI 潤色，再比對原意，留下更像「你」的版本。</p></div>
+    </div>
+
+    <h3 style="font-size:22px;margin-bottom:6px" class="reveal">實戰展示：AI 如何優化文句？</h3>
+    <p style="color:var(--ink2);font-size:14px;margin-bottom:26px" class="reveal">同一段記憶，兩種呈現方式——比較左右差異，注意黃色標記處的升級。</p>
+    <div class="cmp reveal">
+      <div class="cmp-box cmp-before">
+        <span class="cmp-tag">原始草稿 Before</span>
+        我高中參加了吉他社。一開始手指很痛，但我每天練習。後來我在成發會上表演，雖然很緊張，但是最後大家都有拍手。我覺得很有成就感，學到了堅持的重要。
+        <div class="cmp-note">❗ 問題：流水帳、缺乏細節、形容詞貧乏。</div>
+      </div>
+      <div class="cmp-box cmp-after">
+        <span class="cmp-tag">AI 潤飾後 After</span>
+        高一時，我抱著那把破舊的木吉他，<span class="hl">指尖因按弦而長出了厚繭，那是一種帶著刺痛的真實感</span>。成發會那晚，<span class="hl">聚光燈打在臉上的熱度讓我掌心微微出汗</span>，但當第一個和弦刷下，恐懼瞬間轉化為專注。曲終時，<span class="hl">台下的掌聲如潮水般湧來</span>，那一刻我明白，堅持並非只有苦澀，它終將釀成最甜美的回憶。
+        <div class="cmp-note">✨ 優化：感官描寫＋具象化比喻＋情感深化。</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px;margin:56px 0 6px" class="reveal">提示詞四大心法</h3>
+    <p style="color:var(--ink2);font-size:14px;margin-bottom:24px" class="reveal">提示詞越具體，AI 越貼近你的需求。萬用公式：<b>角色＋背景＋任務＋格式＋風格</b>。</p>
+    <div class="grid g4">
+      <div class="card reveal"><span class="chip red">01</span><h3 style="font-size:16px;margin-top:10px">具體明確</h3><p>不說「幫我寫自傳」，要說「以學騎車為例，寫出挫敗到喜悅的感受」。</p></div>
+      <div class="card reveal"><span class="chip red">02</span><h3 style="font-size:16px;margin-top:10px">賦予角色</h3><p>「請扮演資深寫作教練／嚴格的面試官」，AI 的輸出品質會明顯不同。</p></div>
+      <div class="card reveal"><span class="chip red">03</span><h3 style="font-size:16px;margin-top:10px">提供範例</h3><p>貼上你喜歡的文風範例或自己的草稿，讓 AI 有對齊的標準。</p></div>
+      <div class="card reveal"><span class="chip red">04</span><h3 style="font-size:16px;margin-top:10px">迭代追問</h3><p>第一次產出不滿意很正常。追問「再具體一點」「換個開頭」，逐步逼近理想。</p></div>
+    </div>
+
+    <!-- generator -->
+    <div class="gen reveal" style="margin-top:50px">
+      <h3 style="font-size:22px;margin-bottom:4px">🎛 AI 自傳提示詞產生器</h3>
+      <p style="color:var(--ink2);font-size:14px;margin-bottom:26px">選擇你的卡關點與想要的風格，一鍵生成專屬提示詞，複製後貼給任何 AI 工具。</p>
+      <div class="gen-cols">
+        <div>
+          <div class="opt-group">
+            <label>1️⃣ 你目前遇到什麼困難？</label>
+            <div class="opts" id="painOpts">
+              <label class="opt"><input type="radio" name="pain" value="blank" checked><span>🤯 腦袋一片空白，不知從何寫起</span></label>
+              <label class="opt"><input type="radio" name="pain" value="detail"><span>📦 我有故事，但不知道怎麼深入細節</span></label>
+              <label class="opt"><input type="radio" name="pain" value="flat"><span>📄 寫得太像流水帳，缺乏文學感</span></label>
+              <label class="opt"><input type="radio" name="pain" value="messy"><span>🧩 段落很亂，需要整理結構</span></label>
+            </div>
+          </div>
+          <div class="opt-group">
+            <label>2️⃣ 你希望呈現的風格是？</label>
+            <div class="opts" id="styleOpts">
+              <label class="opt"><input type="radio" name="gstyle" value="warm" checked><span>🕯 溫暖懷舊（像散文）</span></label>
+              <label class="opt"><input type="radio" name="gstyle" value="pro"><span>💼 專業自信（適合求職／申請）</span></label>
+              <label class="opt"><input type="radio" name="gstyle" value="fun"><span>😄 幽默風趣（展現個性）</span></label>
+              <label class="opt"><input type="radio" name="gstyle" value="deep"><span>🌊 深刻反思（探索內心）</span></label>
+            </div>
+          </div>
+          <button class="btn primary" id="genBtn" style="width:100%;justify-content:center">⚡ 生成提示詞</button>
+        </div>
+        <div>
+          <div class="promptbox" id="genOut"><span style="opacity:.55">// 請在左側選擇選項，然後點擊「生成提示詞」……</span></div>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <button class="btn ghost small copy-btn-st" data-copy="#genOut">📋 複製提示詞</button>
+          </div>
+          <p class="gen-hint">💡 小提醒：把〔在此填入〕的地方換成你的真實素材，提示詞越具體，產出越貼合你。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- workshop -->
+    <div class="workshop reveal" style="margin-top:50px">
+      <h3 style="font-size:22px;margin-bottom:4px">🧪 微型工作坊：記憶片段即時試驗</h3>
+      <p style="color:var(--ink2);font-size:14px;margin-bottom:8px">輸入一個簡單的記憶片段（或點下方範例），看看「模擬 AI 編輯」會給出什麼建議。試著輸入開心、難過、或只有對話的內容，結果會不一樣！</p>
+      <label class="f-label">你的記憶片段：</label>
+      <textarea id="memInput" placeholder="例如：那年夏天，我們全家第一次去海邊……"></textarea>
+      <div class="sample-chips">
+        <button data-sample="happy">😊 開心的記憶範例</button>
+        <button data-sample="sad">🌧 難過的記憶範例</button>
+        <button data-sample="talk">💬 只有對話的範例</button>
+      </div>
+      <button class="btn primary" id="memBtn">🔍 取得模擬 AI 編輯建議</button>
+      <div id="memOut">
+        <div style="background:#fdfaf1;border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-top:18px">
+          <div style="font-weight:700;font-size:14px;color:var(--teal);margin-bottom:6px">🤖 模擬 AI 編輯這樣說：</div>
+          <div id="memBullets"></div>
+        </div>
+        <div class="promptbox" id="memPrompt" style="margin-top:16px"></div>
+        <button class="btn ghost small copy-btn-st" data-copy="#memPrompt" style="margin-top:12px">📋 複製追問提示詞</button>
+      </div>
+    </div>
+
+    <!-- tool table -->
+    <h3 style="font-size:22px;margin:56px 0 6px" class="reveal">AI 工具怎麼挑？</h3>
+    <p style="color:var(--ink2);font-size:14px;margin-bottom:22px" class="reveal">工具迭代快速，重點是心法而非特定產品。以下為常見類型的一般性比較：</p>
+    <div class="tbl-wrap reveal"><table class="tbl">
+      <tr><th>工具類型</th><th>常見代表</th><th>特色</th><th>最適合的任務</th></tr>
+      <tr><td>通用對話型</td><td>ChatGPT、Claude 等</td><td>長文理解與改寫能力強，可多輪對話</td><td>框架設計、訪談式提問、潤稿</td></tr>
+      <tr><td>文件整合型</td><td>Gemini、Copilot 等</td><td>可結合文件上傳與搜尋</td><td>整理學經歷資料、對照職缺描述</td></tr>
+      <tr><td>平台內建 AI</td><td>求職平台、文書工具</td><td>有固定模板，一鍵生成</td><td>履歷骨架（小心模板化、千人一面）</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ================= CH04 PRACTICE ================= -->
+<section id="practice">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">Chapter 04・Studio Practice</div>
+      <h2>課堂練習流程：從概念到實作</h2>
+      <p>四個階段、一張互動工作紙。你寫的每個字都會自動儲存在瀏覽器中，完成最終作業後可一鍵下載成 Word 檔繳交。</p>
+    </div>
+    <div class="steps reveal">
+      <div class="step"><div class="n">1</div><h4>記憶喚醒</h4><p>列出 3 個關鍵人生時刻或重要物品，作為書寫的種子。</p></div>
+      <div class="step"><div class="n">2</div><h4>AI 訪談</h4><p>扮演受訪者，回答 AI 提出的深度問題，挖掘細節。</p></div>
+      <div class="step"><div class="n">3</div><h4>初稿生成</h4><p>請 AI 將訪談內容整理成結構完整的草稿。</p></div>
+      <div class="step"><div class="n">4</div><h4>人工潤飾</h4><p>加入個人情感溫度，逐字確認「真實性」。</p></div>
+    </div>
+
+    <!-- worksheet -->
+    <div class="ws reveal" style="margin-top:56px" id="worksheet">
+      <div class="ws-head">
+        <div><h3>✍️ 互動工作紙｜邊讀邊寫，自動儲存</h3><p>內容儲存於你的瀏覽器（localStorage），關閉頁面也不會消失。</p></div>
+        <span id="saveState">✓ 已自動儲存</span>
+      </div>
+      <div class="ws-body">
+
+        <!-- 壹 -->
+        <div class="ws-sec">
+          <h4><span class="sec-badge">壹</span>熱身活動：探索你的故事</h4>
+          <p class="task">★ 請回答以下問題，幫助你和 AI 更了解你的背景與創作重點。</p>
+          <label class="f-label">一、你覺得人生中哪三個時刻對你最重要？</label>
+          <div class="f-row">
+            <input type="text" data-save="ws_m1" placeholder="時刻 1（例：第一次站上舞台）">
+            <input type="text" data-save="ws_m2" placeholder="時刻 2（例：搬家轉學那年）">
+            <input type="text" data-save="ws_m3" placeholder="時刻 3（例：和好友和解的下午）">
+          </div>
+          <label class="f-label">二、你想讓讀者了解什麼樣的你？（可多選）</label>
+          <div class="chk-chips">
+            <label class="chk-chip"><input type="checkbox" data-save="ws_traits" value="家庭背景"><span>🏠 家庭背景</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="ws_traits" value="性格特點"><span>🌟 性格特點</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="ws_traits" value="成長經歷"><span>🌱 成長經歷</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="ws_traits" value="職業目標"><span>🎯 職業目標</span></label>
+          </div>
+        </div>
+
+        <!-- 貳 -->
+        <div class="ws-sec">
+          <h4><span class="sec-badge">貳</span>利用 AI 生成自傳框架</h4>
+          <p class="task">★ 任務：根據熱身活動的內容，向 AI 輸入提示詞，讓它為你設計寫作框架。</p>
+          <div class="promptbox" style="margin-bottom:18px" id="frmPrompt">請根據我提供的三個重要時刻（〔填入你的時刻〕）和我想強調的特點（〔填入你的特點〕），幫我設計一個自傳框架。框架需分為「童年」、「青年」和「現在」三個部分，並為每個部分提供兩個核心主題建議。<button class="copy-btn copy-btn-st" data-copy="#frmPrompt">複製</button></div>
+          <p style="font-size:13px;color:var(--ink2);margin-bottom:14px">⚠️ 提示詞越具體，AI 生成的框架越貼合你的需求！收到回答後，請抄錄到下表：</p>
+          <div class="tbl-wrap"><table class="tbl framework-tbl">
+            <tr><th>AI 生成框架</th><th>內容（請抄錄 AI 的回答）</th></tr>
+            <tr><td>童年篇</td><td><input type="text" data-save="ws_fc1" placeholder="核心主題／事件一" style="margin-bottom:8px"><input type="text" data-save="ws_fc2" placeholder="核心主題／事件二"></td></tr>
+            <tr><td>青年篇</td><td><input type="text" data-save="ws_fy1" placeholder="核心主題／事件一" style="margin-bottom:8px"><input type="text" data-save="ws_fy2" placeholder="核心主題／事件二"></td></tr>
+            <tr><td>現在篇</td><td><input type="text" data-save="ws_fn1" placeholder="核心主題／事件一" style="margin-bottom:8px"><input type="text" data-save="ws_fn2" placeholder="核心主題／事件二"></td></tr>
+          </table></div>
+          <label class="f-label">◎ 自我反思：這個框架有什麼地方需要修改或補充？</label>
+          <textarea data-save="ws_reflect1" id="reflect1" placeholder="約 200 字。例如：青年篇的兩個主題距離太遠，想換成……"></textarea>
+          <div class="counter" id="c_reflect1">已寫 0 字／建議約 200 字</div>
+        </div>
+
+        <!-- 參 -->
+        <div class="ws-sec">
+          <h4><span class="sec-badge">參</span>探索細節與情感</h4>
+          <p class="task">★ 任務：針對框架中的某個主題，向 AI 提問，深入挖掘細節和情感描述。</p>
+          <div class="promptbox" style="margin-bottom:18px" id="qPrompt">💡 提問範例：「幫我描述一次我在童年時克服困難的經歷，讓情感更加豐富。這次經歷是關於我如何學會騎腳踏車，描述我從跌倒到成功時，那種挫敗、堅持到最終喜悅的細微感受。」<button class="copy-btn copy-btn-st" data-copy="#qPrompt">複製</button></div>
+          <div class="qa-block"><div class="qa-t">🙋 你的問題</div><textarea data-save="ws_q" placeholder="把你想問 AI 的問題寫在這裡……"></textarea></div>
+          <div class="qa-block"><div class="qa-t">🤖 AI 生成建議</div><textarea data-save="ws_a" placeholder="抄錄 AI 的回答重點……"></textarea></div>
+          <label class="f-label">◎ 你的感想：AI 的建議是否真實地反映你的經歷？哪些地方需要調整？</label>
+          <textarea data-save="ws_think" placeholder="例如：AI 寫跌倒在柏油路上，但我記得的是泥土地……"></textarea>
+        </div>
+
+        <!-- 肆 -->
+        <div class="ws-sec">
+          <h4><span class="sec-badge">肆</span>試寫自傳片段</h4>
+          <p class="task">★ 任務：根據框架和 AI 的建議完成片段（至少 5 句），加入你自己的「聲音」。</p>
+          <textarea data-save="ws_frag" id="frag" rows="6" placeholder="從最有感覺的那一段寫起。先求有，再求好——不用一次寫完美。"></textarea>
+          <div class="counter" id="c_frag">已寫 0 句／至少 5 句</div>
+          <label class="f-label">◎ 自我檢查：</label>
+          <div class="chk-chips">
+            <label class="chk-chip"><input type="checkbox" data-save="ws_chk1" value="有"><span>✅ 加入了自己的細節和情感</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="ws_chk2" value="有"><span>✅ 內容讀起來像「我的聲音」</span></label>
+          </div>
+        </div>
+
+        <!-- 伍 -->
+        <div class="ws-sec">
+          <h4><span class="sec-badge">伍</span>語句潤色練習</h4>
+          <p class="task">★ 任務：把剛才片段中的句子交給 AI，請它潤色，目標是更清晰、更生动。</p>
+          <div class="promptbox" style="margin-bottom:14px" id="pPrompt">請將以下句子潤色，使其更具文學性和畫面感：「我的童年很有趣，我常常和朋友們在田野裡跑來跑去，直到天黑才回家。」<button class="copy-btn copy-btn-st" data-copy="#pPrompt">複製</button></div>
+          <div class="qa-block" style="background:#f6f0e2"><div class="qa-t">✨ AI 潤色示範</div><p style="font-size:14px;color:var(--ink2);line-height:2">「我的童年是一幅金色的畫卷。我們像一隊無畏的探險家，奔跑在麥浪起伏的田野間，直到夕陽將天空染成墨藍，才帶著一身星光和泥土的氣息，不捨地踏上歸途。」</p></div>
+          <label class="f-label">原始句子</label>
+          <textarea data-save="ws_psrc" placeholder="貼上你想潤色的原句……"></textarea>
+          <label class="f-label">AI 潤色版本</label>
+          <textarea data-save="ws_pai" placeholder="抄錄 AI 的潤色結果……"></textarea>
+          <label class="f-label">◎ 比較與修改：AI 的建議是否讓語句更清晰、生動？你會如何修改它？</label>
+          <textarea data-save="ws_pnote" placeholder="例如：比喻很美，但『墨藍』不符合我家鄉的天空，我改成……"></textarea>
+        </div>
+
+        <div class="ws-actions">
+          <button class="btn ghost" id="clearWs">🗑 清空工作紙</button>
+          <a class="btn ghost" href="#reflection">前往最終作業，下載完整作業 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CH05 CAREER ================= -->
+<section id="career" class="dark-sec">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">Chapter 05・Career Mode</div>
+      <h2>求職自傳與履歷：傳統心法 × AI 賦能</h2>
+      <p>場景切換！當自傳遇見履歷，寫作目標從「被理解」變成「被錄取」。核心觀念只有一句：<b style="color:var(--gold)">自傳不是回憶錄，而是一份精準的自我行銷提案。</b></p>
+    </div>
+
+    <div class="grid g2 reveal">
+      <div class="card" style="background:#2f2a22;border-color:#46402f">
+        <h3 style="color:var(--gold)">✅ 寫作重點</h3>
+        <ul class="mini-list"><li style="color:#d8cfba">表明特質與優勢，讓面試官觀察性格與表達能力</li><li style="color:#d8cfba">核心問題：「為什麼我是這份工作最適合的人選？」</li><li style="color:#d8cfba">以應徵職缺為重心，強調與他人不同的特色</li></ul>
+      </div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f">
+        <h3 style="color:#e0876f">❌ 常見誤區</h3>
+        <ul class="mini-list"><li style="color:#d8cfba">不是闡述生命故事、不是流水帳（缺乏特色）</li><li style="color:#d8cfba">不要只把「賺錢」當成唯一動機</li><li style="color:#d8cfba">不要直接套用千篇一律的版型</li></ul>
+      </div>
+    </div>
+
+    <div class="cmp reveal" style="margin-top:24px">
+      <div class="cmp-box cmp-before" style="background:#2f2a22;border-color:#46402f;color:#d8cfba">
+        <span class="cmp-tag" style="background:#8f3a28">❌ 錯誤範例（流水帳）</span>
+        「我出生在台北，家中有四個人，爸爸很嚴格，媽媽很慈祥……」
+        <div class="cmp-note" style="border-color:#46402f;color:#9a9080">與工作無關的家庭瑣事，無法凸顯專業。</div>
+      </div>
+      <div class="cmp-box cmp-after" style="background:#31362b;border-color:#5a6b4a;color:#e4e8da">
+        <span class="cmp-tag" style="background:var(--teal)">⭕ 修正方向（連結特質）</span>
+        「父母嚴謹的身教讓我養成了高度自律與注重細節的習慣，這反映在我的程式碼品質上……」
+        <div class="cmp-note" style="border-color:#5a6b4a;color:#aab598">將家庭背景連結到對工作有利的人格特質。</div>
+      </div>
+    </div>
+
+    <div class="two-col reveal" style="margin-top:44px">
+      <div>
+        <h3 style="font-size:20px;margin-bottom:16px;color:var(--cream)">盲點突破：求學 vs. 求職</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>情境</th><th>對象</th><th>看重重點</th></tr>
+          <tr><td>申請學校（求學）</td><td style="color:#d8cfba">教授</td><td style="color:#d8cfba">申請者的「動機」與「學術潛力／能力」</td></tr>
+          <tr><td>應徵工作（求職）</td><td style="color:#d8cfba">人資／主管</td><td style="color:#d8cfba">與企業文化相近的「人格特質」與「實務學經歷」</td></tr>
+        </table></div>
+      </div>
+      <div>
+        <h3 style="font-size:20px;margin-bottom:16px;color:var(--cream)">心態差異：想獲得 → 想貢獻</h3>
+        <div style="background:rgba(184,67,46,.14);border:1px solid rgba(184,67,46,.4);border-radius:12px;padding:18px 22px;font-size:14px;color:#d8cfba;margin-bottom:14px">
+          <b style="color:#e0876f">學生心態：</b>「希望能來貴公司<u>學習</u>……」<br><span style="font-size:13px;color:#9a9080">💡 公司不是學校，沒有義務付錢讓你學習。</span>
+        </div>
+        <div style="background:rgba(47,109,98,.16);border:1px solid rgba(47,109,98,.5);border-radius:12px;padding:18px 22px;font-size:14px;color:#d8cfba">
+          <b style="color:#7fc3ae">職員心態：</b>「希望能運用我的專長，為貴公司<u>解決／創造</u>……」<br><span style="font-size:13px;color:#9a9080">💡 強調你能帶來的價值。</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px;margin:52px 0 6px;color:var(--cream)" class="reveal">新鮮人缺乏經驗怎麼辦？</h3>
+    <p style="color:#9a9080;font-size:14px;margin-bottom:24px" class="reveal">不用擔心沒有豐功偉業！人資更看重「學習能力」與「特質」。</p>
+    <div class="grid g3 reveal">
+      <div class="card" style="background:#2f2a22;border-color:#46402f"><h3 style="color:var(--gold);font-size:17px">⛏ 挖掘經歷</h3><p style="color:#c9bfa8">社團、課堂專題、計畫參與、打工經驗都是寶。例：擔任社團總務 → 預算控管與細心；超商打工 → 高壓下的顧客應對。</p></div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f"><h3 style="color:var(--gold);font-size:17px">🤝 展現軟實力</h3><p style="color:#c9bfa8">解決問題、溝通協作、抗壓性。例：「曾協調意見不合的組員，最終準時完成專案」即證明溝通協調力。</p></div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f"><h3 style="color:var(--gold);font-size:17px">🎯 連結職缺</h3><p style="color:#c9bfa8">細讀 Job Description。應徵行銷 → 強調經營系會粉專、提升互動率；應徵行政 → 強調文書作業零失誤。</p></div>
+    </div>
+
+    <!-- structure tabs -->
+    <h3 style="font-size:24px;margin:60px 0 6px;color:var(--cream)" class="reveal">自傳架構解析：六段式心法</h3>
+    <p style="color:#9a9080;font-size:14px;margin-bottom:24px" class="reveal">字數建議 <b style="color:var(--gold)">500～1200 字</b>（原則上不超過 1200 字）。點選各段查看撰寫重點與 ❌⭕ 實戰對照。</p>
+    <div class="tabbar reveal" id="structTabs">
+      <button class="tab-btn active" data-t="s1">① 個人資料與特質</button>
+      <button class="tab-btn" data-t="s2">② 學業與特殊表現</button>
+      <button class="tab-btn" data-t="s3">③ 工作經驗</button>
+      <button class="tab-btn" data-t="s4">④ 社團與成長</button>
+      <button class="tab-btn" data-t="s5">⑤ 證照與專長</button>
+      <button class="tab-btn" data-t="s6">⑥ 報考理由與抱負</button>
+    </div>
+    <div class="reveal">
+      <div class="tab-panel active" id="s1">
+        <ul class="struct-points"><li>勿把自傳當家族歷史長篇大論，只提與應徵職務相關的背景或故事。</li><li>可描述對自己品行、人格有重大正面影響的人事物（如家庭教育）。</li></ul>
+        <div class="struct-grid">
+          <div class="ex-bad"><b>❌ 太流水帳：</b><br>「我家有四個人，爸爸是公務員，媽媽是家庭主婦，從小家庭幸福美滿，造就我樂觀的個性。」</div>
+          <div class="ex-good"><b>⭕ 連結特質（應徵行政職）：</b><br>「父親身為公務員，其一絲不苟的工作態度深深影響了我。這使我在處理文書與數據時，養成了多次核對、注重細節的習慣，這也是我認為自己能勝任此職務的最大優勢。」</div>
+        </div>
+        <div class="tip-line">💡 一行秘訣：每個家庭故事都要問「所以呢？」——它能連結到什麼工作特質？</div>
+      </div>
+      <div class="tab-panel" id="s2">
+        <ul class="struct-points"><li>將學經歷與「專業」連結；新鮮人結合在校所學、證照與職缺所需知識。</li><li>強調得獎事蹟、實習經驗。原則：可以藏拙，但千萬不能造假。</li></ul>
+        <div class="struct-grid">
+          <div class="ex-bad"><b>❌ 只列課程名稱：</b><br>「我在學校修過行銷學、消費者行為、統計學，成績都不錯。」</div>
+          <div class="ex-good"><b>⭕ 具體專案成果：</b><br>「在『行銷管理』課程中，我擔任組長帶領 4 人小組，針對校園周邊咖啡廳進行品牌分析，運用 SWOT 與問卷調查提出三個改善方案，最終獲得全班最高分。」</div>
+        </div>
+        <div class="tip-line">💡 一行秘訣：把「修過課」升級成「做成過什麼」，數字是最有力的佐證。</div>
+      </div>
+      <div class="tab-panel" id="s3">
+        <ul class="struct-points"><li>有職場歷練者：重點放在具體績效與特殊貢獻。</li><li>新鮮人：描述打工的特殊體驗與心得，轉化為軟實力。</li></ul>
+        <div class="struct-grid">
+          <div class="ex-bad"><b>❌ 只是去打卡：</b><br>「我在便利商店打工兩年，負責結帳和補貨。」</div>
+          <div class="ex-good"><b>⭕ 強調解決問題能力：</b><br>「在便利商店服務期間，面對尖峰時段人潮，我學會高效率的多工處理；也曾主動優化倉庫貨品擺放順序，讓補貨時間減少約 15%，大幅提升團隊效率。」</div>
+        </div>
+        <div class="tip-line">💡 一行秘訣：打工不卑微，「你在其中解決了什麼」才是人資想看的。</div>
+      </div>
+      <div class="tab-panel" id="s4">
+        <ul class="struct-points"><li>涵蓋：幹部／義工經驗、活動辦理、競賽參與。</li><li>重點：寫出你在社團中學到的「正面成長經驗」。</li></ul>
+        <div class="struct-grid">
+          <div class="ex-bad"><b>❌ 只有職稱：</b><br>「我大二擔任吉他社公關，負責拉贊助。」</div>
+          <div class="ex-good"><b>⭕ 過程與抗壓性：</b><br>「擔任吉他社公關期間，初期拜訪商家屢次被拒，但我調整話術並製作更精美的贊助企劃書，最終說服 5 家在地商家、籌得 2 萬元經費。這段經歷磨練了我的抗壓性與陌生開發膽識。」</div>
+        </div>
+        <div class="tip-line">💡 一行秘訣：寫「挫折 → 調整 → 成果」的弧線，比職稱本身動人十倍。</div>
+      </div>
+      <div class="tab-panel" id="s5">
+        <ul class="struct-points"><li>列出與職務相關的證照（語文、電腦、才藝）；內容豐富時建議用表格整理。</li><li>試圖展現：創新、規劃、溝通能力（面試官最看重）。</li></ul>
+        <div class="struct-grid">
+          <div class="ex-bad"><b>❌ 只是列清單：</b><br>「多益 850 分、日檢 N2、Excel 證照。」</div>
+          <div class="ex-good"><b>⭕ 證明應用能力：</b><br>「具備多益 850 分的英語能力，能直接閱讀國外最新技術文件，並在實習期間協助翻譯公司內部教材；也擅長以 Excel 樞紐分析表處理數據，快速產出視覺化報表。」</div>
+        </div>
+        <div class="tip-line">💡 一行秘訣：證照不是收藏，寫出「它能為公司做什麼」。</div>
+      </div>
+      <div class="tab-panel" id="s6">
+        <ul class="struct-points"><li>強調專業能力足以勝任，表達積極學習、認真負責的態度。</li><li>展現能夠為公司發展貢獻心力的意願。</li></ul>
+        <div class="struct-grid">
+          <div class="ex-bad"><b>❌ 罐頭式吹捧：</b><br>「貴公司是業界龍頭，福利很好，希望能來這裡學習。」</div>
+          <div class="ex-good"><b>⭕ 具體貢獻與願景：</b><br>「我長期關注貴公司在數位轉型上的佈局，十分認同以數據驅動決策的理念。期許自己運用在校所學的數據分析技能，為團隊挖掘更有價值的市場洞察，並在三年內成為能獨當一面的專案經理。」</div>
+        </div>
+        <div class="tip-line">💡 一行秘訣：提前研究公司動態，寫出「只有投這家才寫得出」的句子。<br>📎 附件提醒：成績單、獎狀、作品集等證明文件切勿造假，面試時可攜帶正本。</div>
+      </div>
+    </div>
+
+    <!-- technique grid -->
+    <h3 style="font-size:22px;margin:56px 0 20px;color:var(--cream)" class="reveal">撰寫技巧總整理</h3>
+    <div class="grid g4 reveal">
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">🎯 目的不同，重點不同</div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">📝 內容真實，切勿吹噓</div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">🚫 切莫抄襲，要有特色</div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">🔍 再三校稿，避免錯誤</div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">📑 分段敘述，設立標題</div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">💪 積極進取，抗壓性強</div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">🏢 了解職務，認識公司</div>
+      <div class="card" style="background:#2f2a22;border-color:#46402f;text-align:center;font-size:14.5px;color:#d8cfba">📷 照片端莊，切勿搞怪</div>
+    </div>
+    <div class="motto reveal" style="margin-top:44px">
+      <small>✨ 精華口訣 ✨</small>
+      文詞莊重不可草率，簡單精要切忌冗長。<br>符合需求論述專長，了解行情薪水合理。<br>社團經驗團隊精神，履歷照片端莊大方。
+    </div>
+
+    <!-- AI 4 steps -->
+    <h3 style="font-size:24px;margin:64px 0 6px;color:var(--cream)" class="reveal">🚀 AI 賦能：用 AI 打造完美履歷自傳</h3>
+    <p style="color:#9a9080;font-size:14px;margin-bottom:28px" class="reveal">科技與文學的融合——利用 AI 協助你更精準地表達個人優勢。四個步驟，照著做就好。</p>
+
+    <div class="ws-sec reveal" style="border-bottom:1px solid #46402f;padding-bottom:34px;margin-bottom:34px">
+      <h4 style="color:var(--gold)"><span class="sec-badge">一</span>準備餵養 AI 的資料</h4>
+      <p style="font-size:14px;color:#c9bfa8;margin:10px 0 14px">AI 需要你的「原料」才能產出好內容。請先整理：</p>
+      <div class="grid g3">
+        <div style="font-size:13.5px;color:#d8cfba">📇 <b>基本資料</b>：姓名、聯絡方式、照片、職稱</div>
+        <div style="font-size:13.5px;color:#d8cfba">🎯 <b>目標職位</b>：明確的求職目標與公司類型</div>
+        <div style="font-size:13.5px;color:#d8cfba">🙋 <b>自我介紹</b>：4～6 個代表能力與佐證</div>
+        <div style="font-size:13.5px;color:#d8cfba">🛠 <b>技能專長</b>：硬實力（工具／語言）＋軟實力</div>
+        <div style="font-size:13.5px;color:#d8cfba">🎓 <b>學經歷</b>：學校／公司、時間、具體成就與專案</div>
+        <div style="font-size:13.5px;color:#d8cfba">🏆 <b>成就證書</b>：獎項、發表作品</div>
+      </div>
+    </div>
+
+    <div class="ws-sec reveal" style="border-bottom:1px solid #46402f;padding-bottom:34px;margin-bottom:34px">
+      <h4 style="color:var(--gold)"><span class="sec-badge">二</span>利用 AI 生成基礎履歷</h4>
+      <p style="font-size:14px;color:#c9bfa8;margin:10px 0 14px">Prompt 技巧：「提供明確的格式範本，並要求 AI 自動填充細節」</p>
+      <div class="promptbox" id="crPrompt2">請幫我撰寫一段描述我在 [公司名稱/社團名稱] 擔任 [職位名稱] 的專業經歷，並強調 [你的成就/學到的技能]。
+請使用繁體中文，語氣專業且積極。<button class="copy-btn copy-btn-st" data-copy="#crPrompt2">複製</button></div>
+    </div>
+
+    <div class="ws-sec reveal" style="border-bottom:1px solid #46402f;padding-bottom:34px;margin-bottom:34px">
+      <h4 style="color:var(--gold)"><span class="sec-badge">三</span>角色扮演優化履歷</h4>
+      <p style="font-size:14px;color:#c9bfa8;margin:10px 0 14px">讓 AI 扮演專家，幫你潤飾文字並增加專業度。</p>
+      <div class="promptbox" id="crPrompt3">請扮演一名 [你的目標職位，例如：前端工程師]，你是一位擅長展現自己優勢的求職者，請根據以下要求撰寫一份能在面試官眼前脫穎而出的求職履歷：
+
+1. 請使用 [繁體中文] 撰寫
+2. 所有技術和專有名詞都使用 [英文] 呈現
+3. 請優化描述，並添加具體量化的資訊增強履歷可信度
+4. 在基本資料後加上 [自我介紹]，以列點呈現 5 個有小標題的履歷亮點，再呈現工作經驗與專案
+
+要優化的履歷草稿如下：
+[在此貼上你的履歷草稿]<button class="copy-btn copy-btn-st" data-copy="#crPrompt3">複製</button></div>
+    </div>
+
+    <div class="ws-sec reveal" style="border-bottom:none;margin-bottom:0;padding-bottom:0">
+      <h4 style="color:var(--gold)"><span class="sec-badge">四</span>AI 面試官找碴（逆向工程）</h4>
+      <p style="font-size:14px;color:#c9bfa8;margin:10px 0 14px">這是最強大的功能！請 AI 扮演嚴格的面試官來挑毛病，再根據批評修正。</p>
+      <p style="font-size:13px;font-weight:700;color:#e0876f;margin-bottom:8px">階段 1：找碴</p>
+      <div class="promptbox" id="crPrompt4" style="margin-bottom:18px">請扮演一名 [目標產業] 領域最嚴苛的 [目標職位] 面試官，審查下面履歷的每個細節，找出可能存在的漏洞與資訊不足的地方，並給我尖銳的批評。
+
+[貼上你的履歷]<button class="copy-btn copy-btn-st" data-copy="#crPrompt4">複製</button></div>
+      <p style="font-size:13px;font-weight:700;color:#7fc3ae;margin-bottom:8px">階段 2：修正</p>
+      <div class="promptbox" id="crPrompt5">請扮演一名 [目標職位]，了解面試官提出履歷 [剛才指出的漏洞與資訊不足] 後，以能增加面試機會的角度，將每點建議整合到下方的履歷中。
+注意：若原本履歷沒有這份經驗，請用「間接」的方式呈現潛力，切勿無中生有。
+
+[貼上你的履歷]<button class="copy-btn copy-btn-st" data-copy="#crPrompt5">複製</button></div>
+    </div>
+
+    <!-- ethics -->
+    <h3 style="font-size:24px;margin:64px 0 6px;color:var(--cream)" class="reveal">⚠️ 重要！AI 寫作的倫理與注意事項</h3>
+    <p style="color:#9a9080;font-size:14px;margin-bottom:26px" class="reveal">AI 是強大的「副駕駛」，但方向盤必須掌握在你自己手中。</p>
+    <div class="ethics reveal">
+      <div class="eth"><h4><span class="warn">① AI 會產生幻覺</span>（Hallucination）</h4><p>AI 有時為了讓句子通順而「編造」事實，例如捏造不存在的獎項或專案細節。</p><div class="fix">✅ 對策：務必逐字檢查！確保每個經歷都真實發生過——面試被問到答不出來，會直接出局。</div></div>
+      <div class="eth"><h4><span class="warn">② 隱私與資安風險</span></h4><p>免費版 AI 模型通常會使用對話紀錄進行訓練。</p><div class="fix">✅ 對策：餵資料時，把真實姓名、電話、住址、身分證號用 [姓名]、[電話] 代替，生成後再自己填回。</div></div>
+      <div class="eth"><h4><span class="warn">③ 失去個人風格</span>（AI 味）</h4><p>AI 的文章往往四平八穩、用詞華麗但空洞，人資一眼就能看出「這是 ChatGPT 寫的」。</p><div class="fix">✅ 對策：生成初稿後，加入你的「故事細節」「情緒感受」與「口語習慣」，讓文字有溫度。</div></div>
+      <div class="eth"><h4><span class="warn">④ 輔助而非替代</span></h4><p>過度依賴 AI，會讓你對自己的履歷內容不熟悉。</p><div class="fix">✅ 對策：把 AI 當「編輯」或「顧問」，不是「槍手」——思考過程必須是你自己的。</div></div>
+    </div>
+    <div class="callout reveal" style="background:rgba(192,143,60,.12);border-color:var(--gold)"><span class="c-ic">🧭</span><div style="font-size:16px;font-family:var(--serif);color:var(--cream)"><b style="color:var(--gold)">結語：工具是死的，人是活的。</b><div style="font-family:var(--sans);font-size:13.5px;color:#c9bfa8;margin-top:6px">無論科技如何進步，自傳與履歷的核心永遠是「你」。善用 AI 梳理邏輯、潤飾文句，但請保留那份屬於你獨特的生命歷程與熱情。</div></div></div>
+  </div>
+</section>
+
+<!-- ================= REFLECTION ================= -->
+<section id="reflection" class="alt">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">Chapter 06・Reflection & Final</div>
+      <h2>課堂反思與最終作業</h2>
+      <p>寫作的終點不是交稿，而是理解自己如何使用工具。完成下方反思與初稿，即可一鍵下載完整作業的 Word 檔。</p>
+    </div>
+
+    <div class="grid g3 reveal" style="margin-bottom:40px">
+      <div class="card"><h3 style="font-size:16px">🤔 這是我的故事，還是 AI 的故事？</h3><p>當文字被 AI 大幅修飾後，它是否仍保有原本的真實性？</p></div>
+      <div class="card"><h3 style="font-size:16px">💗 情感是否失真？</h3><p>AI 生成的華麗詞藻，是否精確表達了你當時細膩的情感？</p></div>
+      <div class="card"><h3 style="font-size:16px">✂️ 作者的責任</h3><p>你刪改了什麼？保留了什麼？這些選擇代表了什麼？</p></div>
+    </div>
+
+    <div class="ws reveal">
+      <div class="ws-head"><div><h3>📋 課堂反思 + 最終作業</h3><p>同樣會自動儲存，與工作紙合併下載。</p></div></div>
+      <div class="ws-body">
+        <div class="ws-sec">
+          <h4><span class="sec-badge">反</span>課堂反思</h4>
+          <label class="f-label">1. 你覺得 AI 在哪個環節對你的幫助最大？（可複選）</label>
+          <div class="chk-chips">
+            <label class="chk-chip"><input type="checkbox" data-save="r_help" value="框架設計"><span>🏗 框架設計</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="r_help" value="細節挖掘"><span>⛏ 細節挖掘</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="r_help" value="語句潤色"><span>✒️ 語句潤色</span></label>
+          </div>
+          <textarea data-save="r_help_note" placeholder="請說明：那個環節中，AI 具體幫了你什麼？" style="margin-top:12px"></textarea>
+          <label class="f-label">2. AI 生成的內容如何影響你的自傳創作？</label>
+          <textarea data-save="r_q2" placeholder="例如：它給了我開頭的勇氣，但最好的句子還是我自己親身經歷的部分……"></textarea>
+          <label class="f-label">3. 你認為如何平衡 AI 與個人創作的角色？</label>
+          <textarea data-save="r_q3" placeholder="例如：AI 負責提供選項與潤色，我負責選擇與把關真實……"></textarea>
+        </div>
+
+        <div class="ws-sec">
+          <h4><span class="sec-badge">終</span>最終作業：自傳初稿（不少於 300 字）</h4>
+          <p class="task">★ 請根據今天的練習，完成一篇不少於 300 字的自傳初稿，並利用 AI 進行潤色與調整。</p>
+          <textarea data-save="r_final" id="finalDraft" rows="10" placeholder="把散落在工作紙各處的珍珠，串成一條項鍊吧。"></textarea>
+          <div class="progress-bar"><div class="progress-fill" id="finalBar"></div></div>
+          <div class="counter" id="c_final">已寫 0 字／至少 300 字</div>
+          <label class="f-label">繳交前自我檢查：</label>
+          <div class="chk-chips">
+            <label class="chk-chip"><input type="checkbox" data-save="r_chk" value="有細節與情感"><span>❤️ 有細節與情感</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="r_chk" value="像我的聲音"><span>🗣 像我的聲音</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="r_chk" value="已用AI潤色"><span>✨ 已用 AI 潤色</span></label>
+            <label class="chk-chip"><input type="checkbox" data-save="r_chk" value="已逐字核對事實"><span>🔎 已逐字核對事實</span></label>
+          </div>
+        </div>
+
+        <div class="ws-actions">
+          <button class="btn primary" id="dlAll">💾 下載完整作業內容（.doc）</button>
+          <span style="font-size:13px;color:var(--ink2);align-self:center">點擊後將下載 Word 檔（.doc），開啟後即可直接編輯、繳交。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote reveal" style="margin-top:44px">
+      「AI 是強大的助手，能提供華麗的詞藻與工整的結構，但只有你能賦予文字真正的溫度與靈魂。別忘了，科技是為了讓你的獨特光芒更耀眼，而非掩蓋它。」
+      <small>Keep Writing, Keep Real. ✒️</small>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <div class="ch-no">FAQ・補充站</div>
+      <h2>常見問題補給包</h2>
+      <p>同學最常問的五個問題，一次解答。</p>
+    </div>
+    <div class="reveal">
+      <div class="acc"><button class="acc-btn">AI 寫的自傳算抄襲嗎？<span class="pl">＋</span></button><div class="acc-body"><div class="acc-body-in">關鍵在「思考的主體是誰」。若素材、觀點與取捨都是你的，AI 只是協助表達，屬於合理輔助；但若整篇由 AI 憑空生成、內容與你無關，就涉及誠信問題。多數課程要求標註 AI 使用情形，繳交前請依任課教師規範辦理。</div></div></div>
+      <div class="acc"><button class="acc-btn">提示詞要寫多詳細才夠？<span class="pl">＋</span></button><div class="acc-body"><div class="acc-body-in">掌握「角色＋背景＋任務＋格式＋風格」五要素。與其說「幫我寫自傳」，不如說「請以寫作教練身分，根據我學騎車的經歷，寫一段 150 字、溫暖懷舊風格、著重挫敗到喜悅情緒轉折的段落」。資訊越具體，返工越少。</div></div></div>
+      <div class="acc"><button class="acc-btn">AI 捏造了我沒有的經歷怎麼辦？<span class="pl">＋</span></button><div class="acc-body"><div class="acc-body-in">這就是「幻覺」。請把 AI 的產出當成「草稿提案」而非「事實陳述」：逐句問自己「這真的發生過嗎？」若細節不符，直接刪除或在對話中要求 AI 嚴格依照你提供的素材重寫，不要自行添加情節。</div></div></div>
+      <div class="acc"><button class="acc-btn">個人隱私資料該怎麼處理？<span class="pl">＋</span></button><div class="acc-body"><div class="acc-body-in">投餵前先「去識別化」：用 [姓名]、[電話]、[公司A] 等代號取代真實個資，生成完畢再自行填回。避免輸入身分證號、住址、帳號密碼等敏感資訊，並留意所用工具的資料使用政策。</div></div></div>
+      <div class="acc"><button class="acc-btn">交稿前，最後要檢查什麼？<span class="pl">＋</span></button><div class="acc-body"><div class="acc-body-in">四關口訣：①<b>真實</b>——每個事件都經得起面試追問；②<b>聲音</b>——大聲朗讀，聽起來像不像你；③<b>細節</b>——有沒有具體的場景、動作與數字；④<b>校對</b>——錯字、標點與格式（求職自傳 500～1200 字、分段加標題）。</div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div style="max-width:300px">
+        <h5>AI × 自傳寫作實驗室</h5>
+        <p style="line-height:2">融合文學篇、實戰篇與求職篇的互動式學習指南——願每一段被寫下的記憶，都閃著你自己的光。</p>
+      </div>
+      <div>
+        <h5>快速導覽</h5>
+        <a href="#meaning">Chapter 01・自傳的意義</a>
+        <a href="#techlit">Chapter 02・文學 × 科技</a>
+        <a href="#aiapp">Chapter 03・AI 應用</a>
+      </div>
+      <div>
+        <h5>練習與實戰</h5>
+        <a href="#practice">Chapter 04・課堂練習工作紙</a>
+        <a href="#career">Chapter 05・求職自傳心法</a>
+        <a href="#reflection">Chapter 06・反思與最終作業</a>
+      </div>
+      <div>
+        <h5>寫作錦囊</h5>
+        <a href="#aiapp">提示詞產生器</a>
+        <a href="#aiapp">記憶片段工作坊</a>
+        <a href="#faq">常見問題 FAQ</a>
+      </div>
+    </div>
+    <div class="f-bottom">
+      © 大一國文・應用文寫作課程 × AI 文學實驗室｜請遵循所有步驟完成作業。<br>
+      <span class="kr">Keep Writing, Keep Real.</span>
+    </div>
+  </div>
+</footer>
+
+<button id="toTop" title="回到頂端">↑</button>
+<div id="toast"></div>
+
+<script>
+/* ============ helpers ============ */
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200);}
+function copyText(txt){
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(()=>toast('已複製 ✓'));}
+  else{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已複製 ✓');}
+}
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.copy-btn-st');
+  if(!btn)return;
+  const el=$(btn.getAttribute('data-copy'));
+  if(el){
+    let txt=el.innerText.trim();
+    txt=txt.replace(/複製$/,'').trim();
+    copyText(txt);
+  }
+});
+
+/* ============ nav / progress / totop ============ */
+const pbar=$('#pbar'),toTop=$('#toTop');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  pbar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  toTop.classList.toggle('show',h.scrollTop>600);
+},{passive:true});
+toTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+$('#burger').onclick=()=>$('#navLinks').classList.toggle('open');
+$$('#navLinks a').forEach(a=>a.onclick=()=>$('#navLinks').classList.remove('open'));
+
+/* active link */
+const secIds=['map','meaning','techlit','aiapp','practice','career','reflection'];
+const navMap={};$$('#navLinks a').forEach(a=>navMap[a.getAttribute('href').slice(1)]=a);
+const secObs=new IntersectionObserver(es=>{
+  es.forEach(en=>{if(en.isIntersecting){
+    $$('#navLinks a').forEach(a=>a.classList.remove('active'));
+    if(navMap[en.target.id])navMap[en.target.id].classList.add('active');
+  }});
+},{rootMargin:'-40% 0px -55% 0px'});
+secIds.forEach(id=>{const el=document.getElementById(id);if(el)secObs.observe(el);});
+
+/* reveal */
+const rObs=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');rObs.unobserve(en.target);}}),{threshold:.12});
+$$('.reveal').forEach(el=>rObs.observe(el));
+
+/* ============ accordion ============ */
+$$('.acc-btn').forEach(btn=>btn.onclick=()=>{
+  const acc=btn.parentElement,body=acc.querySelector('.acc-body'),open=acc.classList.contains('open');
+  $$('.acc.open').forEach(o=>{o.classList.remove('open');o.querySelector('.acc-body').style.maxHeight=null;});
+  if(!open){acc.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
+});
+
+/* ============ structure tabs ============ */
+$$('#structTabs .tab-btn').forEach(b=>b.onclick=()=>{
+  $$('#structTabs .tab-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  $$('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(b.dataset.t).classList.add('active');
+});
+
+/* ============ prompt generator ============ */
+const painTxt={
+ blank:'我目前腦袋一片空白，不知從何寫起。請先列出 8 個能幫助我回憶人生關鍵時刻的引導問題（關於家庭、學校、朋友、挫折、愛好），逐一訪談我；等我回答後，再幫我把素材整理成一份自傳素材清單。',
+ detail:'我已經有想寫的故事，但缺乏細節。請扮演一位耐心的訪談者，針對我下面的事蹟追問「當時的場景、聲音、氣溫、對話、心情轉折」，幫我挖掘更深的記憶。我的故事是：〔在此填入〕',
+ flat:'以下是我的自傳草稿，內容偏流水帳。請先找出 3 個最有發展潛力的片段，說明可以如何加入感官描寫與心理轉折，並示範改寫其中一段。草稿：〔在此貼上〕',
+ messy:'請幫我把以下零散段落重新組織成有主題、有小標題的自傳結構（可分為童年／青年／現在，或起承轉合），並指出可以刪除的冗言贅字。內容：〔在此貼上〕'
+};
+const styleTxt={
+ warm:'整體風格請溫暖懷舊，像散文般有畫面感，多用具體的生活細節與感官描寫。',
+ pro:'語氣請專業自信，適合求職與升學申請，強調能力與具體成果，避免過度抒情。',
+ fun:'請帶一點幽默風趣的口吻，展現我的個性與機智，但保持得體、不輕浮。',
+ deep:'請深刻反思，探索事件對我的意義與內心的變化，文字可以較文學化。'
+};
+function genPrompt(){
+  const pain=document.querySelector('input[name=pain]:checked').value;
+  const sty=document.querySelector('input[name=gstyle]:checked').value;
+  const out='你是一位擅長個人敘事的寫作教練，同時也是細心的訪談者。\n\n【任務】'+painTxt[pain]+'\n\n【風格】'+styleTxt[sty]+'\n\n【格式】請使用繁體中文回答；若需要我補充資訊，請先提問再動筆。';
+  $('#genOut').textContent=out;
+}
+$('#genBtn').onclick=()=>{genPrompt();toast('提示詞已生成 ✓');};
+
+/* ============ memory workshop ============ */
+const samples={
+ happy:'那年夏天，我們全家第一次去海邊。我第一次看到那麼大的海，興奮得一直跑向浪花，結果被海水打濕了整條褲子，大家都笑了。',
+ sad:'畢業典禮那天下著雨，我最後一次走進教室。黑板上還留著同學塗鴉的字，我忽然意識到，有些日子真的回不去了。',
+ talk:'「你確定要這樣做嗎？」她看著我問。我沉默了很久，最後只點點頭。那天的風很大，我們誰都沒有再說話。'
+};
+$$('.sample-chips button').forEach(b=>b.onclick=()=>{$('#memInput').value=samples[b.dataset.sample];toast('已填入範例，點擊分析看看 →');});
+$('#memBtn').onclick=()=>{
+  const t=$('#memInput').value.trim();
+  if(!t){toast('請先輸入一段記憶片段 ✍️');return;}
+  const has=w=>w.some(x=>t.includes(x));
+  const pos=['開心','快樂','興奮','幸福','期待','笑','溫暖','感動','成就','喜歡','愛','雀躍'];
+  const neg=['難過','傷心','哭','害怕','緊張','後悔','孤單','淚','挫折','生氣','失望','沉默'];
+  const sen=['光','色','聲音','吵','安靜','氣味','香','臭','味道','甜','鹹','冷','熱','痛','癢','濕','軟','風','雨','亮'];
+  const tim=['那年','那天','小時候','國小','國中','高中','歲','夏天','冬天','春天','秋天','清晨','傍晚','畢業'];
+  const dial=t.includes('「')||t.includes('"')||t.includes('『');
+  const p=has(pos),n=has(neg),s=has(sen),ti=has(tim);
+  const bullets=[];
+  if(p&&!n)bullets.push(['🌞','這段記憶帶著明亮的情緒。建議保留「開心」最具體的那個瞬間——當時誰的笑容、什麼動作、什麼聲音？把形容詞換成畫面。']);
+  else if(n&&!p)bullets.push(['🌧','這段記憶帶著低迴的情緒，是很好的文學素材。試著描述情緒來臨時身體的反應（喉嚨、眼眶、腳步），並找到一個象徵物（雨、空椅子、黑板）承載它。']);
+  else bullets.push(['🎭','這段記憶情緒層次豐富（或有留白）。不妨寫出情緒的「轉折點」：哪一句話、哪一個動作讓感受改變了？']);
+  if(dial)bullets.push(['💬','有對話是很棒的起點！建議補上說話者的表情、語氣與停頓，並想想：這句對話為什麼讓你記到現在？']);
+  else bullets.push(['🗨','可以試著加入一句當年的對話——哪怕只是一句「快回來吃飯！」，瞬間就能讓場景活起來。']);
+  if(!s)bullets.push(['👀','目前缺少感官描寫。請任選一種加入：當時的光線、耳邊的聲音、空氣的味道、皮膚的溫度……一個就夠，畫面感立刻不同。']);
+  if(!ti)bullets.push(['📍','加上時間與地點的錨點（例如「國小三年級的夏天」），讀者會更容易進入你的故事。']);
+  if(t.length<40)bullets.push(['📏','片段還很短，可以按「前因 → 場景 → 轉折 → 感受」四步擴寫，目標 100～150 字。']);
+  if(t.length>150)bullets.push(['📚','素材相當豐富！建議挑選最核心的一個畫面深入描寫，其餘留到別的段落，避免一次塞太多。']);
+  if(t.includes('覺得')||t.includes('感到'))bullets.push(['✂️','找到「覺得／感到」這類直述情緒的詞了嗎？試著把它換成具體動作：與其說「覺得很緊張」，不如寫「手心出汗，一直搓褲子」。']);
+  bullets.push(['🔑','下一步：把下方提示詞貼給真正的 AI，請它示範改寫，再對照自己的真實感受取捨——留下像你的那部分。']);
+  $('#memBullets').innerHTML=bullets.map(b=>'<div class="mem-bullet"><span class="b-ic">'+b[0]+'</span><span>'+b[1]+'</span></div>').join('');
+  const short=t.length>60?t.slice(0,60)+'……':t;
+  $('#memPrompt').textContent='請以這段記憶為基礎，幫我擴寫成約 150 字、有畫面感的段落。要求：①加入至少兩種感官描寫；②保留我的語氣，不要過度華麗；③結尾留下餘韻。記憶片段：「'+short+'」';
+  $('#memOut').style.display='block';
+  $('#memOut').scrollIntoView({behavior:'smooth',block:'nearest'});
+  toast('建議已生成 ✓');
+};
+
+/* ============ worksheet storage ============ */
+const KEY='ai_autobio_ws_v1';
+function collectData(){
+  const data={};
+  $$('[data-save]').forEach(el=>{
+    const k=el.dataset.save;
+    if(el.type==='checkbox'){if(!data[k])data[k]=[];if(el.checked)data[k].push(el.value);}
+    else data[k]=el.value;
+  });
+  return data;
+}
+function saveAll(){
+  try{localStorage.setItem(KEY,JSON.stringify(collectData()));}catch(e){}
+  const st=$('#saveState');if(st){st.classList.add('show');clearTimeout(st._h);st._h=setTimeout(()=>st.classList.remove('show'),1600);}
+}
+function loadAll(){
+  let d={};try{d=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){}
+  $$('[data-save]').forEach(el=>{
+    const k=el.dataset.save,v=d[k];
+    if(v===undefined)return;
+    if(el.type==='checkbox')el.checked=Array.isArray(v)&&v.includes(el.value);
+    else el.value=v;
+  });
+}
+let saveTimer=null;
+document.addEventListener('input',e=>{if(e.target.closest('[data-save]')){clearTimeout(saveTimer);saveTimer=setTimeout(saveAll,450);}});
+document.addEventListener('change',e=>{if(e.target.closest('[data-save]'))saveAll();});
+loadAll();
+
+$('#clearWs').onclick=()=>{
+  if(!confirm('確定要清空所有已儲存的內容嗎？此操作無法復原。'))return;
+  localStorage.removeItem(KEY);
+  $$('[data-save]').forEach(el=>{if(el.type==='checkbox')el.checked=false;else el.value='';});
+  updateCounters();toast('已清空');
+};
+
+/* ============ counters ============ */
+function charLen(s){return String(s||'').replace(/\s/g,'').length;}
+function updateCounters(){
+  const r1=$('#reflect1');if(r1){const c=charLen(r1.value),el=$('#c_reflect1');el.textContent='已寫 '+c+' 字／建議約 200 字';el.classList.toggle('ok',c>=150);}
+  const fg=$('#frag');if(fg){
+    const n=fg.value.split(/[。！？!?；;\n]+/).filter(s=>s.trim()).length;
+    const el=$('#c_frag');el.textContent='已寫 '+n+' 句／至少 5 句'+(n>=5?' ✓':'');el.classList.toggle('ok',n>=5);
+  }
+  const fd=$('#finalDraft');if(fd){
+    const c=charLen(fd.value),el=$('#c_final');
+    el.textContent='已寫 '+c+' 字／至少 300 字'+(c>=300?' ✓ 已達門檻':'');
+    el.classList.toggle('ok',c>=300);
+    $('#finalBar').style.width=Math.min(100,c/300*100)+'%';
+  }
+}
+['reflect1','frag','finalDraft'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',updateCounters);});
+updateCounters();
+
+/* ============ Word (.doc) 下載 ============ */
+function gv(k,def){
+  const el=document.querySelector('[data-save="'+k+'"]');
+  if(!el)return def||'';
+  if(el.type==='checkbox')return el.checked?el.value:'';
+  return el.value.trim()||def||'';
+}
+function joinChk(k){
+  const arr=[];
+  $$('[data-save="'+k+'"]').forEach(el=>{if(el.checked)arr.push(el.value);});
+  return arr.length?arr.join('、'):'（未勾選）';
+}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function P(t,indent){return {p:t,indent:!!indent};}
+function blocksToHtml(blocks){
+  var out='';
+  for(var i=0;i<blocks.length;i++){
+    var b=blocks[i],txt=esc(b.p||b.h||b.sub||b.h2||b.h3||b.note||'').replace(/\n/g,'<br>');
+    if(b.h)out+='<h1>'+txt+'</h1>';
+    else if(b.sub)out+='<p class="sub">'+txt+'</p>';
+    else if(b.h2)out+='<h2>'+txt+'</h2>';
+    else if(b.h3)out+='<h3>'+txt+'</h3>';
+    else if(b.note)out+='<p class="muted">'+txt+'</p>';
+    else if(b.indent)out+='<p style="margin-left:18pt">'+txt+'</p>';
+    else out+='<p>'+txt+'</p>';
+  }
+  return out;
+}
+function dlWord(filename,blocks){
+  var css='body{font-family:"微軟正黑體","Microsoft JhengHei","Noto Sans TC",sans-serif;font-size:12pt;line-height:1.9;color:#222222;margin:36pt;}'
+    +'h1{font-size:18pt;text-align:center;margin:10pt 0 2pt;color:#8f2f1f;}'
+    +'h2{font-size:14pt;color:#8f2f1f;margin:18pt 0 6pt;padding-bottom:3pt;border-bottom:1.2pt solid #b8432e;}'
+    +'h3{font-size:12.5pt;color:#2f6d62;margin:12pt 0 4pt;}'
+    +'p{margin:4pt 0;}'
+    +'.sub{text-align:center;color:#777;font-size:10.5pt;margin-bottom:16pt;}'
+    +'.muted{color:#888;font-size:10pt;}';
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+    +'<head><meta charset="utf-8"><title>'+esc(filename)+'</title>'
+    +'<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->'
+    +'<style>'+css+'</style></head><body>'+blocksToHtml(blocks)+'</body></html>';
+  var blob=new Blob(['\ufeff',html],{type:'application/msword'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+  toast('已下載 Word 檔 ✓');
+}
+function buildWorksheetBlocks(){
+  var B=[];
+  B.push({h:'大一國文寫作作業：AI 輔助自傳創作'});
+  B.push({sub:'AI × 自傳寫作實驗室'});
+  B.push({h2:'壹、熱身活動：探索你的故事'});
+  B.push(P('一、人生中三個重要時刻：'));
+  B.push(P('1. '+gv('ws_m1','（未填）'),true));
+  B.push(P('2. '+gv('ws_m2','（未填）'),true));
+  B.push(P('3. '+gv('ws_m3','（未填）'),true));
+  B.push(P('二、想讓讀者了解的我：'+joinChk('ws_traits')));
+  B.push({h2:'貳、利用 AI 生成自傳框架'});
+  B.push(P('童年篇：'+gv('ws_fc1','（未填）')+'；'+gv('ws_fc2','（未填）')));
+  B.push(P('青年篇：'+gv('ws_fy1','（未填）')+'；'+gv('ws_fy2','（未填）')));
+  B.push(P('現在篇：'+gv('ws_fn1','（未填）')+'；'+gv('ws_fn2','（未填）')));
+  B.push(P('自我反思（約 200 字）：'));
+  B.push(P(gv('ws_reflect1','（未填）'),true));
+  B.push({h2:'參、探索細節與情感'});
+  B.push(P('你的問題：'+gv('ws_q','（未填）')));
+  B.push(P('AI 生成建議：'+gv('ws_a','（未填）')));
+  B.push(P('我的感想：'+gv('ws_think','（未填）')));
+  B.push({h2:'肆、試寫自傳片段'});
+  B.push(P(gv('ws_frag','（未填）')));
+  B.push(P('自我檢查——加入自己的細節和情感：'+(gv('ws_chk1')?'✓':'✗')+'；內容讀起來像我的聲音：'+(gv('ws_chk2')?'✓':'✗')));
+  B.push({h2:'伍、語句潤色練習'});
+  B.push(P('原始句子：'+gv('ws_psrc','（未填）')));
+  B.push(P('AI 潤色版本：'+gv('ws_pai','（未填）')));
+  B.push(P('比較與修改：'+gv('ws_pnote','（未填）')));
+  return B;
+}
+$('#dlAll').onclick=()=>{
+  var B=buildWorksheetBlocks();
+  B.push({h2:'陸、課堂反思'});
+  B.push(P('1. AI 幫助最大的環節：'+joinChk('r_help')));
+  B.push(P('說明：'+gv('r_help_note','（未填）'),true));
+  B.push(P('2. AI 生成內容如何影響我的自傳創作：'));
+  B.push(P(gv('r_q2','（未填）'),true));
+  B.push(P('3. 如何平衡 AI 與個人創作的角色：'));
+  B.push(P(gv('r_q3','（未填）'),true));
+  B.push({h2:'最終作業：自傳初稿（不少於 300 字）'});
+  B.push(P('字數統計：'+charLen(gv('r_final',''))+' 字'));
+  B.push(P('自我檢查：'+joinChk('r_chk')));
+  B.push(P(gv('r_final','（未填）')));
+  B.push({note:'© 大一國文寫作課程 × AI 文學實驗室・請遵循所有步驟完成作業。Keep Writing, Keep Real.'});
+  dlWord('AI輔助自傳_完整作業.doc',B);
+};
+</script>
+</body>
+</html>
